@@ -17,14 +17,11 @@ jobs:
 
       - name: Mirror repository
         run: |
-          # Deshabilitar las credenciales por defecto de GitHub Actions
-               git config --global credential.helper ""
-               
-               git config --global user.email "tu-email@ejemplo.com"
-               git config --global user.name "TuNombre"
+          # 1. Borrar la configuración de credenciales inyectada por el checkout
+               git config --global --unset-all http.https://github.com/.extraheader
           
-          # Agregar el remote usando tu PAT
+          # 2. Configurar el acceso usando tu token
                git remote add backup https://x-access-token:${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
           
-          # Forzar el push
+          # 3. Empujar
                git push --mirror backup

@@ -17,5 +17,7 @@ jobs:
 
       - name: Mirror repository
         run: |
-          git remote add backup https://${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
-          git push --mirror backup
+            git config --global user.email "bot@github.com"
+            git config --global user.name "GitHub Action"
+            git remote add backup https://${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
+            git push --mirror backup

@@ -14,14 +14,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Esto evita que GitHub inyecte las credenciales del bot
+          persist-credentials: false
 
       - name: Mirror repository
         run: |
-          # 1. Borrar la configuración de credenciales inyectada por el checkout
-               git config --global --unset-all http.https://github.com/.extraheader
-          
-          # 2. Configurar el acceso usando tu token
-               git remote add backup https://x-access-token:${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
-          
-          # 3. Empujar
-               git push --mirror backup
+          git remote add backup https://x-access-token:${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
+          git push --mirror backup

@@ -23,7 +23,15 @@ jobs:
             git branch --track "$branch" "origin/$branch" 2>/dev/null || true
           done
 
-      - name: Mirror repository
+      - name: Set up backup remote
         run: |
           git remote add backup https://x-access-token:${{ secrets.BACKUP_TOKEN }}@github.com/${{ secrets.BACKUP_REPO }}.git
-          git push --mirror backup
+
+      - name: Mirror current state (overwrites, always up-to-date)
+        run: git push --mirror backup
+
+      - name: Create dated snapshot tag (never overwritten)
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%d-%Hh%Mm)
+          git tag -a "backup-$TIMESTAMP" -m "Backup snapshot $TIMESTAMP UTC"
+          git push backup "backup-$TIMESTAMP"

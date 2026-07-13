@@ -32,6 +32,8 @@ jobs:
 
       - name: Create dated snapshot tag (never overwritten)
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           TIMESTAMP=$(date -u +%Y-%m-%d-%Hh%Mm)
           git tag -a "backup-$TIMESTAMP" -m "Backup snapshot $TIMESTAMP UTC"
           git push backup "backup-$TIMESTAMP"
